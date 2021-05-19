@@ -6,8 +6,8 @@ here = os.path.dirname(__file__)
 data_path = os.path.dirname(__file__) + "/data/"
 
 usd = 0.78
-include = ["France", "China", 'Australia', "Spain", 'United Kingdom', 'United States', 
-'South Korea', 'Canada', "Germany", "Mexico", "Japan"]
+include = ["China", 'Australia', "Spain", 'United Kingdom', 'United States', 
+'South Korea', "Japan"]
 
 fillo = f"{data_path}20210310-Global-Recovery-Observatory-_-publicv3.xlsx"
 
@@ -36,9 +36,23 @@ bud['Description'] = ''
 bud = bud[['Country','Policy Archetype', 'Policy Name', 
 'Description', 'Date','Source(s)','Total Value, USD (billions)']]
 
+
+## ADD UK, US AND KOREA
+
+uuk = f"{data_path}2021addedspending.xlsx"
+uuk = pd.read_excel(uuk)
+
+uuk['Description'] = ''
+uuk = uuk[['Country','Policy Archetype', 'Policy Name', 
+'Description', 'Date','Source(s)','Total Value, USD (billions)']]
+uuk = uuk[:19]
+
 ## ADD BUDGET TO EXISTING DATSET
 
 df = df.append(bud)
+df = df.append(uuk)
+
+# print(df)
 
 ## GROUP BY TYPE OF PROJECT 
 
@@ -82,7 +96,8 @@ tax["Kind"] = "Tax measures"
 
 ## Other 
 
-other_measures = [("X", "Worker retraining and job creation"), ("H","Job continuation support"), ("G","Targeted welfare cash transfers")]
+other_measures = [("F", "Direct provision of basic needs"), ("R", "Targeted recovery cash transfers"), 
+("X", "Worker retraining and job creation"), ("H","Job continuation support"), ("G","Targeted welfare cash transfers")]
 
 other_icons = [x[0] for x in other_measures]
 
@@ -123,7 +138,7 @@ grouped = final.groupby(by=['Country', 'Kind'])['Total Value, USD (billions)'].s
 
 
 sorted = grouped.sort_values(by="Total Value, USD (billions)", ascending=False)
-print(sorted.loc[sorted['Kind'] =="Infrastructure"])
+# print(sorted.loc[sorted['Kind'] =="Infrastructure"])
 
 grouped = grouped.loc[grouped['Country'].isin(include)]
 
@@ -144,9 +159,10 @@ def makeDropChart(df):
     template = [
             {
                 "title": "Government responses to the Covid pandemic",
-                "subtitle": "Grouped by spending category, measured in billions of US dollars",
-                "footnote": "",
-                "source": "| Sources: Global Recovery Observatory, Oxford University Economic Recovery Project",
+                "subtitle": "From Global Recovery Observatory data, grouped by spending category and measured in billions of US dollars",
+                "footnote": """Global Recovery Observatory dataset was updated through 28/02/2021. 
+                Guardian Australia has added recovery measures from the 2021 Australian and United Kingdom budgets, South Korea supplementary budget, and the American Recovery Plan. More about categorisation in the notes.""",
+                "source": "Global Recovery Observatory, Oxford University Economic Recovery Project, Yonhap News Agency, Wall Street Journal, International Monetary Fund, government websites",
                 "dateFormat": "%Y-%m-%d",
                 "minY": "0",
                 "maxY": "",

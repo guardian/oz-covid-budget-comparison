@@ -21,15 +21,17 @@ df = df.sort_values(by="Fiscal response as % of GDP", ascending=False)
 df['Color'] = "rgb(4, 109, 161)"
 
 df.loc[df['Country'] == "Australia", 'Color'] = 'rgb(204, 10, 17)'
-
+df.loc[df['Country'] == "Australia", 'Fiscal response as % of GDP'] = '14.7'
+# print(df.loc[df['Country'] == "Australia"])
+# 14.7
 def makeDropChart(df):
 	
     template = [
             {
                 "title": "Government Covid spending as % of GDP",
-                "subtitle": "Australian government estimates are slightly lower",
+                "subtitle": "Comparing the federal government's Covid economic support estimate with the COVID-19 Economic Stimulus Index",
                 "footnote": "",
-                "source": "| Sources: Global Recovery Observatory, Oxford University Economic Recovery Project",
+                "source": "COVID-19 Economic Stimulus Index - Ceyhun Elgin, Gokce Basbug, Abdullah Yalaman; Australian federal government budget website",
                 "dateFormat": "%Y-%m-%d",
                 "minY": "0",
                 "maxY": "",
